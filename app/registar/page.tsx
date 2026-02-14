@@ -19,17 +19,19 @@ export default function RegisterPage() {
     setLoading(true);
     setError("");
 
-    // On ajoute explicitement l'URL de redirection
+    // Utilisation de signUp (Inscription)
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        // Redirection après confirmation de l'email (si activée)
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
     if (error) {
-      setError("Ocorreu um erro ao criar a conta. Verifique os dados ou tente outro email.");
+      console.error("Erro no registo:", error); // Traduit
+      setError("Ocorreu um erro ao criar a conta. Verifique os dados ou tente outro email."); // Traduit
     } else {
       // Connexion réussie, on redirige
       router.push("/minha-conta");
@@ -50,7 +52,7 @@ export default function RegisterPage() {
         </div>
 
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-6 border border-red-100">
+          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-6 border border-red-100 font-medium">
             {error}
           </div>
         )}

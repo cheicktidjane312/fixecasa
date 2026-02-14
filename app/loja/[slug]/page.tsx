@@ -41,7 +41,7 @@ export default function ProductPage() {
         .single();
       
       if (error) {
-        console.error('Erreur Supabase:', error);
+        console.error('Erro Supabase:', error); // Traduit
       } else if (data) {
         setProduct(data as Product);
       }
@@ -66,13 +66,13 @@ export default function ProductPage() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center text-primary font-bold">
-      Carregando...
+      A carregar... {/* Traduit */}
     </div>
   );
 
   if (!product) return (
     <div className="min-h-screen flex items-center justify-center text-red-500 font-bold">
-      Produto não encontrado.
+      Produto não encontrado. {/* Traduit */}
     </div>
   );
 
@@ -82,7 +82,7 @@ export default function ProductPage() {
       {/* Navigation de retour */}
       <div className="container mx-auto px-4 py-6">
         <Link href="/loja" className="inline-flex items-center text-slate-500 hover:text-primary transition-colors font-medium">
-          <ArrowLeft size={16} className="mr-2" /> Voltar ao Catálogo
+          <ArrowLeft size={16} className="mr-2" /> Voltar ao Catálogo {/* Traduit */}
         </Link>
       </div>
 
@@ -132,12 +132,12 @@ export default function ProductPage() {
             {/* Indicateur de Stock */}
             <div className="flex items-center gap-2 mb-8 p-3 bg-green-50 text-green-700 rounded-xl w-fit border border-green-100">
               <Package size={20} />
-              <span className="font-bold">Stock disponível: {product.stock} unidades</span>
+              <span className="font-bold">Stock disponível: {product.stock} unidades</span> {/* Traduit */}
             </div>
 
             {/* SÉLECTEUR DE QUANTITÉ */}
             <div className="mb-6">
-                <label className="block text-sm font-bold text-slate-700 mb-2">Quantidade</label>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Quantidade</label> {/* Traduit */}
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={decreaseQuantity}
@@ -161,31 +161,30 @@ export default function ProductPage() {
             <button 
               className="group w-full md:w-auto bg-secondary hover:bg-secondary-hover text-primary font-black text-xl py-5 px-10 rounded-2xl shadow-xl shadow-green-100 transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3"
               onClick={() => {
-                // On appelle addItem autant de fois que la quantité choisie (ou modifie ton store pour accepter la quantité)
-                // Pour faire simple et compatible avec ton store actuel :
+                // On ajoute l'article X fois
                 for(let i = 0; i < quantity; i++) {
                     addItem(product);
                 }
-                alert(`${quantity}x ${product.name} foi adicionado ao carrinho!`);
+                alert(`${quantity}x ${product.name} adicionado ao carrinho!`); // Traduit
               }}
             >
               <ShoppingCart size={24} className="group-hover:rotate-12 transition-transform" />
-              Adicionar ao Carrinho
+              Adicionar ao Carrinho {/* Traduit */}
             </button>
 
             {/* ÉLÉMENTS DE RÉASSURANCE */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 border-t border-slate-100 pt-8">
               <div className="flex flex-col items-center sm:items-start gap-2">
                 <div className="p-2 bg-slate-100 rounded-lg text-primary"><Truck size={20} /></div>
-                <span className="text-xs font-bold text-primary uppercase">Envio Grátis</span>
+                <span className="text-xs font-bold text-primary uppercase">Envio Grátis</span> {/* Traduit */}
               </div>
               <div className="flex flex-col items-center sm:items-start gap-2">
                 <div className="p-2 bg-slate-100 rounded-lg text-primary"><ShieldCheck size={20} /></div>
-                <span className="text-xs font-bold text-primary uppercase">Garantia Pro</span>
+                <span className="text-xs font-bold text-primary uppercase">Garantia Pro</span> {/* Traduit */}
               </div>
               <div className="flex flex-col items-center sm:items-start gap-2">
                 <div className="p-2 bg-slate-100 rounded-lg text-primary"><Check size={20} /></div>
-                <span className="text-xs font-bold text-primary uppercase">Pagamento Seguro</span>
+                <span className="text-xs font-bold text-primary uppercase">Pagamento Seguro</span> {/* Traduit */}
               </div>
             </div>
 

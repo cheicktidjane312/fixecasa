@@ -37,7 +37,7 @@ export default function TrackingPage() {
     }
   };
 
-  // Helper pour le label textuel
+  // Helper pour le label textuel (TRADUIT)
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'pending': return "Pedido Recebido";
@@ -57,7 +57,7 @@ export default function TrackingPage() {
     const cleanId = orderId.trim();
 
     if (!cleanId) {
-      setError("Por favor, insira um ID válido.");
+      setError("Por favor, insira um ID válido."); // Traduit
       setLoading(false);
       return;
     }
@@ -79,7 +79,7 @@ export default function TrackingPage() {
       }
     } catch (err) {
       console.error(err);
-      setError("Encomenda não encontrada. Verifique o ID e tente novamente.");
+      setError("Encomenda não encontrada. Verifique o ID e tente novamente."); // Traduit
     } finally {
       setLoading(false);
     }

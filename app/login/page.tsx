@@ -26,12 +26,13 @@ export default function LoginPage() {
     });
 
     if (error) {
-      console.error("Erreur Login Supabase:", error); // Regarde ta console (F12) si ça plante
+      console.error("Erro no Login Supabase:", error); // Traduit
+      
       // On affiche le vrai message pour comprendre le bug
       if (error.message === "Invalid login credentials") {
-        setError("Email ou mot de passe incorrect.");
+        setError("Email ou palavra-passe incorretos."); // Traduit
       } else if (error.message.includes("Email not confirmed")) {
-        setError("Veuillez confirmer votre email (vérifiez vos spams).");
+        setError("Por favor, confirme o seu email (verifique o spam)."); // Traduit
       } else {
         setError(error.message); // Affiche l'erreur technique exacte
       }

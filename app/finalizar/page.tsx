@@ -69,7 +69,7 @@ export default function CheckoutPage() {
     e.preventDefault();
     setLoading(true);
 
-    console.log("Démarrage de la commande..."); // LOG
+    console.log("A iniciar a encomenda..."); // LOG
 
     const orderData = {
       customer_name: formData.name,
@@ -98,7 +98,7 @@ export default function CheckoutPage() {
         createdId = data.id; 
       }
 
-      console.log("Commande créée avec succès ID:", createdId); // LOG
+      console.log("Encomenda criada com sucesso ID:", createdId); // LOG
 
       // 2. GESTION DES STOCKS
       for (const item of items) {
@@ -114,7 +114,7 @@ export default function CheckoutPage() {
       }
 
       // 3. ENVOI DES EMAILS
-      console.log("Tentative d'envoi d'email..."); // LOG
+      console.log("Tentativa de envio de email..."); // LOG
       try {
         const emailRes = await fetch('/api/send-order', {
             method: 'POST',
@@ -131,13 +131,13 @@ export default function CheckoutPage() {
         
         if (!emailRes.ok) {
             const errorText = await emailRes.text();
-            console.error("Erreur API Email:", errorText);
+            console.error("Erro na API de Email:", errorText);
         } else {
-            console.log("Email envoyé avec succès !");
+            console.log("Email enviado com sucesso!");
         }
 
       } catch (emailError: unknown) {
-          console.error("Erreur réseau Email:", emailError);
+          console.error("Erro de rede no Email:", emailError);
       }
 
       // 4. SUCCÈS

@@ -15,7 +15,7 @@ export default function Header() {
   const { user } = useAuth();
   const router = useRouter();
   
-  // 1. CORRECTION ERREUR "SETSTATE" (L'erreur soulignée en rouge sur ton image)
+  // 1. CORRECTION ERREUR "SETSTATE"
   // On utilise un petit délai pour que React ne râle pas sur la mise à jour synchrone.
   const [isMounted, setIsMounted] = useState(false);
 
@@ -148,6 +148,7 @@ export default function Header() {
               
               <Link href="/contacto" onClick={() => setIsMenuOpen(false)}>Contacto</Link>
               
+              {/* TRADUCTEUR MOBILE : ID SPÉCIFIQUE */}
               <div className="flex items-center gap-2 py-2">
                 <Globe size={16} />
                 <div id="google_translate_element_mobile"></div> 

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Facebook, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 interface SiteSettings {
@@ -24,77 +23,88 @@ export default function Footer() {
 
   useEffect(() => {
     async function fetchSettings() {
-      const { data, error } = await supabase.from('site_settings').select('address, email, phone, facebook_url, instagram_url').single();
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('address, email, phone, facebook_url, instagram_url')
+        .single();
+      
       if (!error && data) setSettings(data as SiteSettings);
     }
     fetchSettings();
   }, []);
 
   return (
-    <footer className="bg-primary text-slate-300 pt-16 pb-8 border-t border-slate-800">
-      <div className="container mx-auto px-4">
+    // CORRECTION CHARTE : Utilisation de 'bg-primary' (Ton Bleu Nuit) au lieu du gris
+    <footer className="bg-primary text-slate-300 pt-16 pb-10 border-t border-white/10 font-sans">
+      <div className="container mx-auto px-6">
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
           
-          {/* COLONNE 1 : LOGO & DESCRIPTION */}
-          <div className="space-y-6">
-            <Link href="/" className="block">
-              {/* Logo en blanc ou adapté pour fond sombre si possible, sinon le png standard */}
-              <img src="/logo.png" alt="FixeCasa" className="h-12 w-auto object-contain bg-white/10 rounded-lg p-2" />
-            </Link>
-            <p className="text-sm leading-relaxed text-slate-400">
-              O parceiro número 1 em ferramentas profissionais na Europa. Qualidade, rapidez e confiança.
-            </p>
-          </div>
-
-          {/* COLONNE 2 : NAVEGAÇÃO */}
+          {/* COLONNE 1 : COORDONNÉES */}
           <div>
-            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Navegação</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/loja" className="hover:text-secondary transition-colors">Catálogo</Link></li>
-              <li><Link href="/rastreio" className="hover:text-secondary transition-colors">Rastrear Encomenda</Link></li>
-              <li><Link href="/contacto" className="hover:text-secondary transition-colors">Contactos</Link></li>
-              <li><Link href="/admin" className="hover:text-red-400 transition-colors">Área Admin</Link></li>
-            </ul>
-          </div>
+            {/* Ligne décorative (couleur secondaire pour le contraste sur le bleu) */}
+            <div className="w-8 h-0.5 bg-secondary mb-6"></div> 
+            
+            <h3 className="text-white font-bold text-lg mb-6">As nossas coordenadas</h3>
+            
+            <div className="space-y-3 text-slate-300 text-sm leading-relaxed">
+              <p className="font-bold text-white text-base">FixeCasa</p>
+              
+              {/* Téléphone Cliquable (Nettoyage des espaces pour le lien tel:) */}
+              <p>
+                <a 
+                  href={`tel:${settings.phone.replace(/\s/g, '')}`} 
+                  className="hover:text-secondary transition-colors flex items-center gap-2"
+                >
+                   {settings.phone}
+                </a>
+              </p>
 
-          {/* COLONNE 3 : LEGAL (Nouveau) */}
-          <div>
-            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Legal</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/mentions" className="hover:text-secondary transition-colors">Menções Legais</Link></li>
-              <li><Link href="/politica" className="hover:text-secondary transition-colors">Política de Privacidade</Link></li>
-            </ul>
-          </div>
+              {/* Email Cliquable */}
+              <p>
+                <a 
+                  href={`mailto:${settings.email}`} 
+                  className="hover:text-secondary transition-colors flex items-center gap-2"
+                >
+                   {settings.email}
+                </a>
+              </p>
 
-          {/* COLONNE 4 : CONTACTOS DYNAMIQUES */}
-          <div>
-            <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Sede Administrativa</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-3">
-                <MapPin size={16} className="text-secondary flex-shrink-0" /> <span>{settings.address}</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail size={16} className="text-secondary flex-shrink-0" /> {settings.email}
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone size={16} className="text-secondary flex-shrink-0" /> {settings.phone}
-              </li>
-            </ul>
-            <div className="flex gap-4 mt-6">
-              {settings.facebook_url && (
-                <a href={settings.facebook_url} target="_blank" className="p-2 bg-slate-800 rounded-full hover:bg-secondary hover:text-primary transition-all"><Facebook size={20} /></a>
-              )}
-              {settings.instagram_url && (
-                <a href={settings.instagram_url} target="_blank" className="p-2 bg-slate-800 rounded-full hover:bg-secondary hover:text-primary transition-all"><Instagram size={20} /></a>
-              )}
+              <p className="max-w-xs">{settings.address}</p>
             </div>
           </div>
+
+          {/* COLONNE 2 : LIENS UTILES */}
+          <div>
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6 border-b border-white/10 pb-2 inline-block">
+              LIGAÇÕES ÚTEIS
+            </h3>
+            <ul className="space-y-3 text-sm">
+              <li><Link href="/historia" className="hover:text-secondary transition-colors block py-1 border-b border-white/5 hover:border-white/20">Nossa história</Link></li>
+              <li><Link href="/mentions" className="hover:text-secondary transition-colors block py-1 border-b border-white/5 hover:border-white/20">Informações legais</Link></li>
+              <li><Link href="/politica" className="hover:text-secondary transition-colors block py-1 border-b border-white/5 hover:border-white/20">Política de Privacidade</Link></li>
+            </ul>
+          </div>
+
+          {/* COLONNE 3 : LIENS RAPIDES */}
+          <div>
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6 border-b border-white/10 pb-2 inline-block">
+              LIGAÇÕES RÁPIDAS
+            </h3>
+            <ul className="space-y-3 text-sm">
+              <li><Link href="/minha-conta" className="hover:text-secondary transition-colors block py-1 border-b border-white/5 hover:border-white/20">A minha conta</Link></li>
+              <li><Link href="/contacto" className="hover:text-secondary transition-colors block py-1 border-b border-white/5 hover:border-white/20">Contactar-nos</Link></li>
+              <li><Link href="/loja" className="hover:text-secondary transition-colors block py-1 border-b border-white/5 hover:border-white/20">Loja</Link></li>
+              <li><Link href="/finalizar" className="hover:text-secondary transition-colors block py-1 border-b border-white/5 hover:border-white/20">Finalizar compras</Link></li>
+              <li><Link href="/loja" className="hover:text-secondary transition-colors block py-1 border-b border-white/5 hover:border-white/20">Lista de desejos</Link></li>
+            </ul>
+          </div>
+
         </div>
 
-        {/* SIGNATURE FIERLAH AGENCY */}
-        <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} FixeCasa. Todos os direitos reservados.</p>
+        {/* SIGNATURE */}
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+          <p>Fixe e Casa © {new Date().getFullYear()}. Todos os direitos reservados.</p>
           
           <p className="flex items-center gap-1">
             Desenvolvido por 

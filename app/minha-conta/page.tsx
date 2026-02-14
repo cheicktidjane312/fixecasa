@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-// --- TYPES ---
+// --- TIPOS ---
 interface OrderItem {
   name: string;
   quantity: number;
@@ -35,17 +35,17 @@ export default function MyAccountPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
 
-  // État pour l'effet visuel de copie
+  // Estado para o efeito visual de cópia
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  // 1. PROTECTION
+  // 1. PROTEÇÃO DE ROTA
   useEffect(() => {
     if (!authLoading && !user) {
       router.push("/login");
     }
   }, [user, authLoading, router]);
 
-  // 2. CHARGEMENT COMMANDES
+  // 2. CARREGAMENTO DAS ENCOMENDAS
   useEffect(() => {
     async function fetchMyOrders() {
       if (!user?.email) return;
@@ -73,14 +73,14 @@ export default function MyAccountPage() {
     router.refresh();
   };
 
-  // FONCTION POUR COPIER L'ID
+  // FUNÇÃO PARA COPIAR O ID
   const handleCopyId = (id: string) => {
     navigator.clipboard.writeText(id);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // --- HELPER STATUS BADGE ---
+  // --- HELPER PARA O EMBLEMA DE ESTADO ---
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
@@ -128,7 +128,7 @@ export default function MyAccountPage() {
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         
-        {/* EN-TÊTE DU PROFIL */}
+        {/* CABEÇALHO DO PERFIL */}
         <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4">
             <div className="bg-primary text-white p-4 rounded-full">
@@ -157,7 +157,7 @@ export default function MyAccountPage() {
           </div>
         </div>
 
-        {/* LISTE DES COMMANDES */}
+        {/* LISTA DE ENCOMENDAS */}
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
           <Package className="text-secondary" /> Histórico de Encomendas
         </h2>
@@ -189,20 +189,22 @@ export default function MyAccountPage() {
                 <div className="bg-slate-50 p-6 flex flex-col md:flex-row justify-between md:items-center gap-4 border-b border-slate-100">
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Data</p>
-                    <p className="font-medium text-slate-800">{new Date(order.created_at).toLocaleDateString()}</p>
+                    <p className="font-medium text-slate-800">
+                      {new Date(order.created_at).toLocaleDateString('pt-PT')}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Total</p>
                     <p className="font-black text-primary text-lg">{order.total_amount.toFixed(2)}€</p>
                   </div>
                   
-                  {/* ZONE STATUS DYNAMIQUE */}
+                  {/* ZONA DE ESTADO DINÂMICO */}
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Estado</p>
                     {getStatusBadge(order.status)}
                   </div>
                   
-                  {/* ZONE IDENTIFIANT AVEC COPIE */}
+                  {/* ZONA IDENTIFICADOR COM CÓPIA */}
                   <div className="md:text-right flex flex-col md:items-end">
                     <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">ID ENCOMENDA</p>
                     <div className="flex items-center gap-2 bg-white px-3 py-1 rounded border border-slate-200">
