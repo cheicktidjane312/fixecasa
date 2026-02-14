@@ -32,7 +32,7 @@ export default function ResetPasswordPage() {
 
       // Envio do email de redefinição
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${origin}/minha-conta/update-password`,
+        redirectTo: `${origin}/recuperar-password/redefinir`,
       });
 
       if (error) {
