@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { Lock, Eye, EyeOff, Save, Loader2, ArrowLeft, KeyRound } from "lucide-react";
@@ -9,12 +9,18 @@ import Link from "next/link";
 export default function UpdatePasswordPage() {
   const router = useRouter();
   
-  // Champs pour l'ancien et le nouveau mot de passe
+  // 1. PROTECTION ANTI-CRASH (Hydratação)
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  // Campos para a antiga e nova palavra-passe
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Gestion de la visibilité
+  // Gestão da visibilidade
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -30,7 +36,7 @@ export default function UpdatePasswordPage() {
     setErrorMessage("");
 
     try {
-      // 1. Validation de base des champs
+      // 1. Validação básica dos campos
       if (!currentPassword || !newPassword || !confirmPassword) {
         throw new Error("Por favor preencha todos os campos.");
       }
@@ -41,11 +47,11 @@ export default function UpdatePasswordPage() {
         throw new Error("A nova palavra-passe deve ter 6+ caracteres.");
       }
 
-      // 2. Vérification de l'ancien mot de passe
+      // 2. Verificação da antiga palavra-passe
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || !user.email) throw new Error("Sessão inválida. Faça login novamente.");
 
-      // On tente une connexion avec l'ancien mot de passe pour vérifier qu'il est correct
+      // Tentamos fazer login com a palavra-passe antiga para verificar se está correta
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: user.email,
         password: currentPassword
@@ -55,7 +61,7 @@ export default function UpdatePasswordPage() {
         throw new Error("A palavra-passe ATUAL está incorreta.");
       }
 
-      // 3. Si l'ancien mot de passe est bon, on met à jour vers le nouveau
+      // 3. Se a antiga palavra-passe estiver correta, atualizamos para a nova
       const { error: updateError } = await supabase.auth.updateUser({
         password: newPassword
       });
@@ -64,13 +70,14 @@ export default function UpdatePasswordPage() {
         throw updateError;
       } else {
         setStatus('success');
-        // Redirection après succès
+        // FIX: Usar router.push para evitar o erro "Client-side exception"
         setTimeout(() => {
-           window.location.href = '/minha-conta'; 
+           router.push('/minha-conta');
+           router.refresh(); 
         }, 1500);
       }
     } catch (error: unknown) {
-      // CORRECTION TYPAGE : On gère l'erreur sans utiliser 'any'
+      // CORREÇÃO DE TIPAGEM: Gerimos o erro sem usar 'any'
       console.error(error);
       setStatus('error');
       
@@ -79,13 +86,16 @@ export default function UpdatePasswordPage() {
       } else {
         setErrorMessage("Ocorreu um erro inesperado.");
       }
-    } finally {
-      setLoading(false);
+      // Paramos o carregamento apenas se houver erro (se sucesso, redirecionamos)
+      setLoading(false); 
     }
   };
 
+  // Se o cliente não estiver montado, não renderiza nada
+  if (!isMounted) return null;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4" suppressHydrationWarning>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100">
         
         <Link href="/minha-conta" className="text-slate-400 hover:text-slate-600 flex items-center gap-1 mb-6 text-sm font-bold">
@@ -109,7 +119,7 @@ export default function UpdatePasswordPage() {
 
         <form onSubmit={handleUpdate} className="space-y-4">
           
-          {/* CHAMP 1 : ANCIEN MOT DE PASSE */}
+          {/* CAMPO 1: PALAVRA-PASSE ATUAL */}
           <div>
             <label className="block text-sm font-bold text-slate-700 mb-1">Palavra-passe Atual</label>
             <div className="relative">
@@ -134,7 +144,7 @@ export default function UpdatePasswordPage() {
 
           <div className="border-t border-slate-100 my-2"></div>
 
-          {/* CHAMP 2 : NOUVEAU MOT DE PASSE */}
+          {/* CAMPO 2: NOVA PALAVRA-PASSE */}
           <div>
             <label className="block text-sm font-bold text-slate-700 mb-1">Nova Palavra-passe</label>
             <div className="relative">
@@ -158,7 +168,7 @@ export default function UpdatePasswordPage() {
             </div>
           </div>
 
-          {/* CHAMP 3 : CONFIRMATION */}
+          {/* CAMPO 3: CONFIRMAÇÃO */}
           <div>
             <label className="block text-sm font-bold text-slate-700 mb-1">Confirmar Nova Palavra-passe</label>
             <div className="relative">

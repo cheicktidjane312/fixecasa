@@ -1,12 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { Mail, ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function ResetPasswordPage() {
+  // 1. PROTECTION ANTI-CRASH (Hydratação)
+  // Garante que o componente só renderiza quando o cliente estiver pronto
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -17,20 +24,31 @@ export default function ResetPasswordPage() {
     setLoading(true);
     setError("");
 
-    // Envoi de l'email de réinitialisation
-    // Note: En localhost, l'email n'est pas envoyé réellement sauf si tu as configuré un SMTP.
-    // Tu devras récupérer le lien dans la console Supabase ou l'onglet "Inbucket" si tu utilises Supabase local.
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/minha-conta/update-password`,
-    });
+    try {
+      // Obter a origem de forma segura para evitar erros de servidor/cliente
+      const origin = (typeof window !== 'undefined' && window.location.origin) 
+        ? window.location.origin 
+        : '';
 
-    if (error) {
-      setError("Erro ao enviar email. Tente novamente.");
-    } else {
-      setSuccess(true);
+      // Envio do email de redefinição
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${origin}/minha-conta/update-password`,
+      });
+
+      if (error) {
+        setError("Erro ao enviar email. Tente novamente.");
+      } else {
+        setSuccess(true);
+      }
+    } catch (err) {
+      setError("Ocorreu um erro inesperado.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
+  // Se o cliente não estiver montado, não renderiza nada para evitar erro
+  if (!isMounted) return null;
 
   if (success) {
     return (
