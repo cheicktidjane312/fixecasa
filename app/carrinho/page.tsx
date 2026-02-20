@@ -105,7 +105,7 @@ export default function CartPage() {
                 href="/finalizar"
                 className="w-full bg-primary hover:bg-slate-800 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-900/20"
               >
-                Finalizar Compra <ArrowRight size={20} />
+                Encomendar <ArrowRight size={20} />
               </Link>
               
               <p className="text-xs text-center text-slate-400 mt-4">
