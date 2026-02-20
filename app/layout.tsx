@@ -5,6 +5,7 @@ import Script from "next/script";
 import Header from "@/components/Header"; 
 import Footer from "@/components/Footer"; 
 import AuthProvider from "@/components/AuthProvider"; // <--- IMPORT
+import Loading from "@/components/loading"; // <--- NOUVEL IMPORT DU LOADER
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +37,9 @@ export default function RootLayout({
             }
           `}
         </Script>
+
+        {/* LOADER GLOBAL (S'affiche par-dessus tout pendant 1.5s) */}
+        <Loading />
         
         {/* ON ENTOURE TOUT LE SITE AVEC LE GESTIONNAIRE DE COMPTE */}
         <AuthProvider>
