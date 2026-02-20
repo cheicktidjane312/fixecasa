@@ -111,7 +111,7 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-bold mb-3 text-primary">Entrega Rápida</h3>
             <p className="text-slate-500 text-sm leading-relaxed">
-              Expedição em até 3 a 4 dias úteis. Acompanhe o seu pedido em tempo real até à sua porta.
+              Entrega em 2 a 3 dias úteis (máximo 72h). Dispomos de meios de transporte aéreos e terrestres para garantir uma entrega fiável, segura e rápida. Acompanhe a sua encomenda em tempo real.
             </p>
           </div>
 
@@ -121,7 +121,7 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-bold mb-3 text-primary">Devolução fácil</h3>
             <p className="text-slate-500 text-sm leading-relaxed">
-              Mudou de ideias? Tem 14 dias para devolver o seu pedido. Satisfação ou reembolso garantido.
+              Notou que a sua encomenda não corresponde ao que foi entregue ou tem alguma dúvida sobre a qualidade? Tem 7 dias para nos notificar, para que possamos encontrar uma solução imediata. 100% satisfeito ou reembolsado!
             </p>
           </div>
 

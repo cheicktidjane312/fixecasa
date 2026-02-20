@@ -48,7 +48,7 @@ export default function Footer() {
             <h3 className="text-white font-bold text-lg mb-6">As nossas coordenadas</h3>
             
             <div className="space-y-3 text-slate-300 text-sm leading-relaxed">
-              <p className="font-bold text-white text-base">FixeCasa</p>
+              <p className="font-bold text-white text-base">Fixe e Casa</p>
               
               {/* Téléphone Cliquable (Nettoyage des espaces pour le lien tel:) */}
               <p>

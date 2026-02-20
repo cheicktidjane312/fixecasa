@@ -59,7 +59,7 @@ export default function HistoryPage() {
                     <h2 className="text-2xl font-bold text-primary">O Início</h2>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-lg">
-                    A FixeCasa nasceu em 2020, com uma missão simples: tornar ferramentas de qualidade profissional acessíveis a todos. Começámos numa pequena garagem, frustrados com a falta de opções que combinassem durabilidade e preço justo. Hoje, somos uma referência para quem gosta de construir e reparar.
+                    A FixeCasa nasceu em 2016, com uma missão simples: tornar ferramentas de qualidade profissional acessíveis a todos. Começámos numa pequena garagem, frustrados com a falta de opções que combinassem durabilidade e preço justo. Hoje, somos uma referência para quem gosta de construir e reparar.
                 </p>
             </section>
 
@@ -96,7 +96,7 @@ export default function HistoryPage() {
                         <ShieldCheck className="text-secondary shrink-0" size={24}/>
                         <div>
                             <span className="font-bold block text-primary text-lg mb-1">Qualidade Garantida</span>
-                            <span className="text-sm text-slate-500">Não vendemos o que não usaríamos. Qualidade acima de tudo.</span>
+                            <span className="text-sm text-slate-500">Só vendemos o que nós próprios usaríamos.</span>
                         </div>
                     </li>
                 </ul>

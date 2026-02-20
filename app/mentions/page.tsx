@@ -40,10 +40,10 @@ export default function MentionsPage() {
               <div className="space-y-2 text-slate-600 leading-relaxed">
                 <p>O site <strong>FixeCasa</strong> é editado por:</p>
                 <ul className="list-disc pl-5 space-y-1 mt-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                  <li><strong>Empresa:</strong> [NOME DA EMPRESA DO CLIENTE]</li>
-                  <li><strong>Sede Social:</strong> Lisboa, Portugal</li>
-                  <li><strong>NIF:</strong> [NÚMERO DE CONTRIBUINTE]</li>
-                  <li><strong>Email:</strong> suporte@fixecasa.com</li>
+                  <li><strong>Empresa:</strong> FIERLAH AGENCY</li>
+                  <li><strong>Sede Social:</strong> Abidjan, Côte d'Ivoire</li>
+                  <li><strong>NIF:</strong> N/A</li>
+                  <li><strong>Email:</strong> ouessogo@fierlah-agency.com</li>
                 </ul>
               </div>
             </div>

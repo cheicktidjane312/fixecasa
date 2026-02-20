@@ -50,7 +50,7 @@ export default function LoginPage() {
           <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
             <LogIn size={32} />
           </div>
-          <h1 className="text-2xl font-black text-primary">Bem-vindo de volta</h1>
+          <h1 className="text-2xl font-black text-primary">Bom ver você de novo</h1>
           <p className="text-slate-500 text-sm">Entre na sua conta FixeCasa</p>
         </div>
 

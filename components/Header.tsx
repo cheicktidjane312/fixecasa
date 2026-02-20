@@ -73,7 +73,7 @@ export default function Header() {
             </div>
           ) : (
             <Link href="/login" className="flex items-center gap-1 hover:text-primary transition-colors border-l border-slate-200 pl-4 ml-2">
-              <LogIn size={16} /> <span>Entrar</span>
+              <LogIn size={16} /> <span>Iniciar sessão</span>
             </Link>
           )}
 

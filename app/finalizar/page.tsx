@@ -232,7 +232,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-slate-50 py-12">
       <div className="container mx-auto px-4 max-w-6xl">
-        <h1 className="text-3xl font-bold text-primary mb-8 text-center">Finalizar Encomenda</h1>
+        <h1 className="text-3xl font-bold text-primary mb-8 text-center">Encomendar</h1>
         
         {!user && !authLoading && (
           <motion.div 
