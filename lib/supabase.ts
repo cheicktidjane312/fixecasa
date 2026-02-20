@@ -8,4 +8,10 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error("Il manque les clés Supabase dans le fichier .env.local !");
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Création du client avec la configuration du sessionStorage
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    // Utilise la mémoire courte du navigateur (s'efface à la fermeture de l'onglet/fenêtre)
+    storage: typeof window !== "undefined" ? window.sessionStorage : undefined,
+  },
+});
