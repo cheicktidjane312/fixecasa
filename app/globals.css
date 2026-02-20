@@ -111,3 +111,11 @@ iframe.goog-te-banner-frame {
     border: none !important;
     box-shadow: none !important;
 }
+/* FORCER LE MENU GOOGLE TRANSLATE AU PREMIER PLAN */
+iframe.goog-te-menu-frame {
+    z-index: 999999 !important;
+}
+/* CACHER LE LOGO GOOGLE POUR GAGNER DE LA PLACE SUR MOBILE */
+.goog-te-gadget img {
+    display: none !important;
+}

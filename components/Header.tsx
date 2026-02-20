@@ -15,8 +15,6 @@ export default function Header() {
   const { user } = useAuth();
   const router = useRouter();
   
-  // 1. CORRECTION ERREUR "SETSTATE"
-  // On utilise un petit délai pour que React ne râle pas sur la mise à jour synchrone.
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -33,15 +31,13 @@ export default function Header() {
   };
 
   return (
-    // 2. AJOUT DU MARGIN-TOP (mt-12)
-    // Cela décolle le menu du haut de page pour laisser la place à la barre Google Translate
     <header className="sticky top-0 z-50 w-full mt-12 border-b border-slate-200 bg-white/95 backdrop-blur-md transition-all duration-300 shadow-sm">
       
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         
         {/* LOGO IMAGE */}
         <Link href="/" className="flex-shrink-0">
-          <img src="/logo.png" alt="FixeCasa Logo" className="h-10 w-auto object-contain" />
+          <img src="/logo.png" alt="FixeCasa Logo" className="h-8 md:h-10 w-auto object-contain" />
         </Link>
 
         {/* NAVIGATION BUREAU */}
@@ -49,7 +45,6 @@ export default function Header() {
           <Link href="/" className="hover:text-primary transition-colors">Início</Link>
           <Link href="/loja" className="hover:text-primary transition-colors">Catálogo</Link>
           
-          {/* Note: J'utilise 'span' à l'intérieur des Link pour éviter l'erreur "Hydration failed: div inside a" */}
           <Link href="/rastreio" className="group flex items-center gap-1 hover:text-primary transition-colors">
             <PackageSearch size={16} /> <span>Rastrear</span>
           </Link>
@@ -82,25 +77,23 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* ACTIONS DROITE */}
-        <div className="flex items-center gap-3">
+        {/* ACTIONS DROITE (Visibles sur tous les écrans) */}
+        <div className="flex items-center gap-2 md:gap-3">
           
-          {/* 3. GOOGLE TRANSLATE (CORRIGÉ) */}
-          {/* J'ai enlevé 'overflow-hidden' et agrandi la largeur pour que le menu déroulant s'affiche ! */}
-          <div className="hidden md:flex items-center bg-slate-100 rounded-full px-3 py-1 gap-2 h-9 min-w-[120px]">
+          {/* 3. GOOGLE TRANSLATE (CORRIGÉ : Visible sur Mobile & PC) */}
+          <div className="flex items-center bg-slate-100 rounded-full px-2 md:px-3 py-1 gap-1 md:gap-2 h-9 min-w-[100px] md:min-w-[120px]">
             <Globe size={14} className="text-slate-500 flex-shrink-0"/>
-            <div className="relative w-full h-full flex items-center">
-               {/* L'ID magique que Google cherche */}
-               <div id="google_translate_element"></div>
+            <div className="relative w-full h-full flex items-center overflow-hidden">
+               {/* L'UNIQUE ID que Google cherche */}
+               <div id="google_translate_element" className="scale-90 md:scale-100 origin-left"></div>
             </div>
           </div>
 
-          {/* PANIER (CORRIGÉ : Pas de div, uniquement des span) */}
-          <Link href="/carrinho" className="relative group ml-2 flex items-center justify-center">
+          {/* PANIER */}
+          <Link href="/carrinho" className="relative group flex items-center justify-center">
             <span className="block p-2 bg-slate-100 rounded-full group-hover:bg-secondary transition-colors text-slate-700 group-hover:text-primary">
-              <ShoppingCart size={20} />
+              <ShoppingCart size={18} className="md:w-5 md:h-5" />
             </span>
-            {/* On affiche le badge seulement une fois monté pour éviter l'erreur rouge */}
             {isMounted && totalItems() > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
                 {totalItems()}
@@ -109,8 +102,8 @@ export default function Header() {
           </Link>
 
           {/* BOUTON MOBILE */}
-          <button className="lg:hidden p-2 text-slate-700" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X /> : <Menu />}
+          <button className="lg:hidden p-1 text-slate-700 ml-1" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
@@ -148,14 +141,7 @@ export default function Header() {
               
               <Link href="/contacto" onClick={() => setIsMenuOpen(false)}>Contacto</Link>
               
-              {/* TRADUCTEUR MOBILE : ID SPÉCIFIQUE */}
-              <div className="flex items-center gap-2 py-2">
-                <Globe size={16} />
-                <div id="google_translate_element_mobile"></div> 
-                <span className="text-xs text-slate-400">(Tradutor)</span>
-              </div>
-
-              <Link href="/admin" onClick={() => setIsMenuOpen(false)} className="text-red-500 font-bold flex items-center gap-2">
+              <Link href="/admin" onClick={() => setIsMenuOpen(false)} className="text-red-500 font-bold flex items-center gap-2 mt-2">
                 <Lock size={16} /> <span>Admin Panel</span>
               </Link>
             </nav>
