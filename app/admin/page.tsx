@@ -4,7 +4,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { 
   CheckCircle, Package, Truck, Loader2, 
-  Trash2, Plus, X, Settings, Save, MapPin, Phone, Mail, Globe, Lock, Hammer, UploadCloud, Eye, EyeOff, Clock, Box 
+  Trash2, Plus, X, Settings, Save, MapPin, Phone, Mail, Globe, Lock, Hammer, UploadCloud, Eye, EyeOff, Clock, Box, Edit 
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -89,6 +89,11 @@ export default function AdminPage() {
   const [newPass, setNewPass] = useState("");
   const [confPass, setConfPass] = useState("");
   const [showPassToggle, setShowPassToggle] = useState(false);
+
+  // --- NOUVEAUX ÉTATS POUR L'ÉDITION ---
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editFormData, setEditFormData] = useState({ name: "", category: "", price: "", stock: "", description: "" });
+  const [updatingProduct, setUpdatingProduct] = useState(false);
 
   // --- LOGIN ---
   const handleLogin = async (e: React.FormEvent) => {
@@ -232,6 +237,44 @@ export default function AdminPage() {
     setLoading(false);
   }
 
+  // --- NOUVELLES FONCTIONS D'ÉDITION ---
+  const openEditModal = (product: Product) => {
+    setEditingProduct(product);
+    setEditFormData({
+      name: product.name,
+      category: product.category,
+      price: product.price.toString(),
+      stock: product.stock.toString(),
+      description: product.description || ""
+    });
+  };
+
+  async function handleUpdateProduct(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingProduct) return;
+    setUpdatingProduct(true);
+
+    const { error } = await supabase
+      .from('products')
+      .update({
+        name: editFormData.name,
+        category: editFormData.category,
+        price: parseFloat(editFormData.price),
+        stock: parseInt(editFormData.stock, 10),
+        description: editFormData.description,
+      })
+      .eq('id', editingProduct.id);
+
+    if (!error) {
+      setEditingProduct(null);
+      fetchProducts(); // Rafraîchit la liste avec les nouvelles données
+      alert("Produto atualizado com sucesso!");
+    } else {
+      alert("Erro ao atualizar o produto: " + error.message);
+    }
+    setUpdatingProduct(false);
+  }
+
   async function handleSaveSettings(e: React.FormEvent) {
     e.preventDefault();
     if (!settings) return;
@@ -313,7 +356,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8 relative">
       <div className="max-w-7xl mx-auto">
         
         {/* HEADER */}
@@ -431,7 +474,10 @@ export default function AdminPage() {
                     <p className="text-xs text-slate-500 mb-1">{product.category}</p>
                     <p className="font-bold text-secondary">{product.price}€</p>
                   </div>
-                  <button onClick={() => handleDeleteProduct(product.id)} className="text-slate-400 hover:text-red-500 p-2 transition-colors"><Trash2 size={20} /></button>
+                  <div className="flex flex-col justify-between border-l pl-2 border-slate-100">
+                    <button onClick={() => openEditModal(product)} className="text-slate-400 hover:text-blue-500 p-2 transition-colors" title="Editar produto"><Edit size={20} /></button>
+                    <button onClick={() => handleDeleteProduct(product.id)} className="text-slate-400 hover:text-red-500 p-2 transition-colors" title="Eliminar produto"><Trash2 size={20} /></button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -589,6 +635,55 @@ export default function AdminPage() {
         )}
 
       </div>
+
+      {/* --- MODAL DE ÉDITION DE PRODUIT (POPUP) --- */}
+      {editingProduct && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-2xl animate-in fade-in zoom-in-95">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+                <Edit size={24} className="text-secondary"/> Editar Produto
+              </h2>
+              <button onClick={() => setEditingProduct(null)} className="text-slate-400 hover:text-red-500 transition-colors">
+                <X size={24} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <label className="block text-sm font-bold text-slate-700 mb-1">Nome do Produto</label>
+                <input required className="w-full border p-3 rounded-lg outline-none focus:border-blue-500" value={editFormData.name} onChange={e => setEditFormData({...editFormData, name: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-1">Categoria</label>
+                <input required className="w-full border p-3 rounded-lg outline-none focus:border-blue-500" value={editFormData.category} onChange={e => setEditFormData({...editFormData, category: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-1">Preço (€)</label>
+                <input required type="number" step="0.01" className="w-full border p-3 rounded-lg outline-none focus:border-blue-500" value={editFormData.price} onChange={e => setEditFormData({...editFormData, price: e.target.value})} />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-bold text-slate-700 mb-1">Stock</label>
+                <input required type="number" className="w-full border p-3 rounded-lg outline-none focus:border-blue-500" value={editFormData.stock} onChange={e => setEditFormData({...editFormData, stock: e.target.value})} />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-bold text-slate-700 mb-1">Descrição</label>
+                <textarea required className="w-full border p-3 rounded-lg h-24 outline-none focus:border-blue-500" value={editFormData.description} onChange={e => setEditFormData({...editFormData, description: e.target.value})} />
+              </div>
+              
+              <div className="md:col-span-2 flex justify-end gap-3 pt-4 mt-2 border-t">
+                <button type="button" onClick={() => setEditingProduct(null)} className="px-6 py-3 rounded-lg font-bold text-slate-600 hover:bg-slate-100 transition-colors">
+                  Cancelar
+                </button>
+                <button type="submit" disabled={updatingProduct} className="bg-primary hover:bg-slate-800 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition-colors">
+                  {updatingProduct ? <CustomSpinner /> : <Save size={18} />} Guardar Alterações
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 }
