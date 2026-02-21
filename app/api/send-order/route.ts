@@ -8,7 +8,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const SENDER_EMAIL = 'encomendas@fixecasa.com'; 
 
 // 2. COMPANY_EMAIL : L'adresse de ton client qui recevra les alertes "Nouvelle Vente"
-const COMPANY_EMAIL = 'cheicktidjane312@gmail.com'; 
+const COMPANY_EMAIL = 'contact@fixecasa.com'; 
 
 // --- TIPOS ESTRITOS ---
 interface OrderItem {
