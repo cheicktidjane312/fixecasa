@@ -3,8 +3,11 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// --- CONFIGURAÇÃO ---
-const SENDER_EMAIL = 'onboarding@resend.dev'; 
+// --- CONFIGURAÇÃO ATUALIZADA (PRODUÇÃO) ---
+// 1. SENDER_EMAIL : Doit OBLIGATOIREMENT utiliser ton domaine vérifié par Resend
+const SENDER_EMAIL = 'encomendas@fixecasa.com'; 
+
+// 2. COMPANY_EMAIL : L'adresse de ton client qui recevra les alertes "Nouvelle Vente"
 const COMPANY_EMAIL = 'cheicktidjane312@gmail.com'; 
 
 // --- TIPOS ESTRITOS ---
@@ -71,7 +74,6 @@ export async function POST(request: Request) {
 
     if (errorClient) {
       console.error("❌ Erro ao enviar para o Cliente:", errorClient);
-      // Note: En mode test (sans domaine), cela échouera si l'email client != email admin
     }
 
     // --- 2. ENVIO: EMAIL PARA A EMPRESA (ADMIN) ---
