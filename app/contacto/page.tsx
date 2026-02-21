@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Mail, MapPin, Phone, Send, Loader2 } from "lucide-react";
+import { Mail, MapPin, Phone, Send, Loader2, CheckCircle } from "lucide-react"; // J'ai ajouté CheckCircle ici
 import { supabase } from "@/lib/supabase";
 
 // On définit le type pour les données
@@ -18,6 +18,10 @@ export default function ContactPage() {
     email: 'suporte@fixecasa.com',
     phone: '+351 912 345 678'
   });
+
+  // --- NOUVEAUX ÉTATS POUR FORMSPREE ---
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // On va chercher les infos dans la base de données
   useEffect(() => {
@@ -36,6 +40,38 @@ export default function ContactPage() {
     fetchSettings();
   }, []);
 
+  // --- FONCTION D'ENVOI FORMSPREE ---
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("https://formspree.io/f/maqdpepl", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+        form.reset(); // On vide les champs du formulaire
+        // Fait disparaître le message de succès après 5 secondes
+        setTimeout(() => setIsSuccess(false), 5000);
+      } else {
+        alert("Ocorreu um erro ao enviar. Por favor, tente novamente.");
+      }
+    } catch (error) {
+      alert("Erro de conexão. Verifique a sua internet.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
@@ -45,7 +81,7 @@ export default function ContactPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
-          {/* INFOS (Gauche) - MAINTENANT DYNAMIQUES */}
+          {/* INFOS (Gauche) - DYNAMIQUES */}
           <div className="space-y-6">
             
             {/* TÉLÉPHONE */}
@@ -83,29 +119,47 @@ export default function ContactPage() {
           </div>
 
           {/* FORMULAIRE (Droite) */}
-          <div className="md:col-span-2 bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
+          <div className="md:col-span-2 bg-white p-8 rounded-2xl shadow-lg border border-slate-100 relative">
             <h2 className="text-xl font-bold text-primary mb-6">Envie uma mensagem</h2>
-            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert('Mensagem enviada com sucesso!'); }}>
+            
+            {/* MESSAGE DE SUCCÈS */}
+            {isSuccess && (
+              <div className="mb-6 p-4 bg-green-50 text-green-700 rounded-lg flex items-center gap-3 border border-green-200">
+                <CheckCircle size={20} className="text-green-500" />
+                <span className="font-medium">Mensagem enviada com sucesso! Entraremos em contacto brevemente.</span>
+              </div>
+            )}
+
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2">Nome</label>
-                  <input type="text" className="w-full border border-slate-200 rounded-lg p-3 outline-none focus:border-secondary transition-colors" placeholder="Seu nome" required />
+                  <input type="text" name="Nome" className="w-full border border-slate-200 rounded-lg p-3 outline-none focus:border-secondary transition-colors disabled:opacity-50" placeholder="Seu nome" required disabled={isSubmitting} />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2">Email</label>
-                  <input type="email" className="w-full border border-slate-200 rounded-lg p-3 outline-none focus:border-secondary transition-colors" placeholder="email@exemplo.com" required />
+                  <input type="email" name="Email" className="w-full border border-slate-200 rounded-lg p-3 outline-none focus:border-secondary transition-colors disabled:opacity-50" placeholder="email@exemplo.com" required disabled={isSubmitting} />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-2">Assunto</label>
-                <input type="text" className="w-full border border-slate-200 rounded-lg p-3 outline-none focus:border-secondary transition-colors" placeholder="Dúvida sobre..." required />
+                <input type="text" name="Assunto" className="w-full border border-slate-200 rounded-lg p-3 outline-none focus:border-secondary transition-colors disabled:opacity-50" placeholder="Dúvida sobre..." required disabled={isSubmitting} />
               </div>
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-2">Mensagem</label>
-                <textarea className="w-full border border-slate-200 rounded-lg p-3 h-32 outline-none focus:border-secondary transition-colors" placeholder="Como podemos ajudar?" required></textarea>
+                <textarea name="Mensagem" className="w-full border border-slate-200 rounded-lg p-3 h-32 outline-none focus:border-secondary transition-colors disabled:opacity-50" placeholder="Como podemos ajudar?" required disabled={isSubmitting}></textarea>
               </div>
-              <button className="bg-secondary hover:bg-secondary-hover text-primary font-bold py-3 px-8 rounded-lg w-full flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-lg">
-                <Send size={18} /> Enviar Mensagem
+              
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="bg-secondary hover:bg-secondary-hover text-primary font-bold py-3 px-8 rounded-lg w-full flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <><Loader2 size={18} className="animate-spin" /> A enviar...</>
+                ) : (
+                  <><Send size={18} /> Enviar Mensagem</>
+                )}
               </button>
             </form>
           </div>
